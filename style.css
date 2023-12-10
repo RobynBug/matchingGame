@@ -1,0 +1,51 @@
+body {
+  display: flex;
+  flex-direction: column;
+  padding: 0% 5%;
+  background-color: rgb(242, 244, 245);
+}
+
+#game div {
+  width: 17%;
+  height: 34vh;
+  margin: 10px;
+  display: inline-block;
+  outline: 2px solid black;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+button {
+  padding: 1rem;
+  background-color: rgb(118, 85, 138);
+  color: lightgrey;
+  font-size: 1.5rem;
+  border: solid 1px rgb(129, 129, 129);
+  box-shadow: 2px 2px 5px black;
+  margin: 4rem 3rem;
+}
+
+.buttons {
+  margin: auto;
+}
+
+.unflipped {
+  background-image: url('./assets/card_back.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 12px solid white;
+  
+}
+
+.matched {
+  display: hidden;
+  font-size: 1.5rem;
+  font-weight: bold;
+  height: 4rem;
+  width: 15rem;
+  text-align: center;
+  text-justify: center;
+}
