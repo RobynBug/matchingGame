@@ -228,6 +228,7 @@ function restore() {
       memoryCards = document.querySelectorAll("#game div");
     }
     if (matched != null) {
+      //restoring class names
       for (let item of memoryCards) {
         if (!matched.includes(item.classList[0])) {
           item.classList.add("unflipped");
@@ -284,6 +285,7 @@ function startGame(e) {
   score.removeAttribute("style", "display");
 }
 
+//function to store the div location upon reload
 function storeCards() {
   let cardArray = JSON.stringify(shuffledColors);
   localStorage.setItem("cards", cardArray);
@@ -293,6 +295,7 @@ function storeCards() {
   localStorage.setItem("GStatus", status);
 }
 
+//update game status
 function updateGameStatus() {
   if (matched == null) {
     gameStatus = undefined;
