@@ -6,7 +6,7 @@ body {
 }
 
 #game {
-  width: 100vw;
+  width: 100%;
   display: grid;
   grid-template-rows: repeat(2, 25rem);
   grid-template-columns: repeat(5, 19rem);
@@ -20,7 +20,7 @@ body {
 }
 
 .gameContainer {
-  width: 100vw;
+  width: 90vw;
   margin: 1rem auto;
 }
 
