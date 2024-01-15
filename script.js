@@ -80,33 +80,33 @@ function cardFlip(currentPick) {
     case "red":
       currentPick.setAttribute(
         "style",
-        "background-image: url('./assets/red.png'); background-size: cover; border: 12px solid transparent; width: 17%; height: 34vh; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
+        "background-image: url('./assets/red.png'); background-size: cover; border: 12px solid transparent; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
       );
 
       break;
     case "blue":
       currentPick.setAttribute(
         "style",
-        "background-image: url('./assets/blue.jpg'); background-size: cover; border: 12px solid transparent; width: 17%; height: 34vh; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
+        "background-image: url('./assets/blue.jpg'); background-size: cover; border: 12px solid transparent; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
       );
 
       break;
     case "green":
       currentPick.setAttribute(
         "style",
-        "background-image: url('./assets/green.jpg'); background-size: cover; border: 12px solid transparent; width: 17%; height: 34vh; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
+        "background-image: url('./assets/green.jpg'); background-size: cover; border: 12px solid transparent; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
       );
       break;
     case "orange":
       currentPick.setAttribute(
         "style",
-        "background-image: url('./assets/orange.jpg'); background-size: cover; border: 12px solid transparent; width: 17%; height: 34vh; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
+        "background-image: url('./assets/orange.jpg'); background-size: cover; border: 12px solid transparent; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
       );
       break;
     case "purple":
       currentPick.setAttribute(
         "style",
-        "background-image: url('./assets/purple.jpg'); background-size: cover; border: 12px solid transparent; width: 17%; height: 34vh; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
+        "background-image: url('./assets/purple.jpg'); background-size: cover; border: 12px solid transparent; outline: 2px solid black; margin: 10px; transition: transform 0.8s; transform: rotateY(180deg); transform-style: preserve-3d;"
       );
       break;
   }
@@ -128,9 +128,12 @@ function unflipCard(lastPick, currentPick) {
 
 //game end function
 function endGame() {
+  if(matched){
   if (matched.length === 10) {
+    updateScore(); 
     gameStatus = false;
   }
+}
 }
 
 // lastPick variable
@@ -143,34 +146,36 @@ let gameStatus = undefined;
 
 // TODO: Implement this function!
 function handleCardClick(event) {
-  let currentPick = event.target;
-  let color = currentPick.classList[0];
-  if (
-    (currentPick && currentPick.id == "pickOne") ||
-    currentPick.id == "pickTwo" ||
-    gameStatus == false
-  ) {
-    return;
-  } else {
-    flipCount++;
-    if (flipCount == 1) {
-      currentPick.classList.remove("unflipped");
-      currentPick.setAttribute("id", "pickOne");
-      cardFlip(currentPick);
-      lastPick = currentPick;
-    } else if (flipCount == 2) {
-      currentPick.classList.remove("unflipped");
-      currentPick.setAttribute("id", "pickTwo");
-      cardFlip(currentPick);
-      if (lastPick.className != currentPick.className) {
-        setTimeout(() => unflipCard(lastPick, currentPick), 1000);
-      } else {
+  if (gameStatus == true) {
+    let currentPick = event.target;
+    let color = currentPick.classList[0];
+    if (
+      (currentPick && currentPick.id == "pickOne") ||
+      currentPick.id == "pickTwo" ||
+      gameStatus == false
+    ) {
+      return;
+    } else {
+      flipCount++;
+      if (flipCount == 1) {
         currentPick.classList.remove("unflipped");
-        matched.push(currentPick.classList[0]);
-        currentPick.classList.add("matched_card");
-        matched.push(lastPick.classList[0]);
-        lastPick.classList.add("matched_card");
-        flipCount = 0;
+        currentPick.setAttribute("id", "pickOne");
+        cardFlip(currentPick);
+        lastPick = currentPick;
+      } else if (flipCount == 2) {
+        currentPick.classList.remove("unflipped");
+        currentPick.setAttribute("id", "pickTwo");
+        cardFlip(currentPick);
+        if (lastPick.className != currentPick.className) {
+          setTimeout(() => unflipCard(lastPick, currentPick), 1000);
+        } else {
+          currentPick.classList.remove("unflipped");
+          matched.push(currentPick.classList[0]);
+          currentPick.classList.add("matched_card");
+          matched.push(lastPick.classList[0]);
+          lastPick.classList.add("matched_card");
+          flipCount = 0;
+        }
       }
     }
   }
@@ -181,6 +186,7 @@ createDivsForColors(shuffledColors);
 
 //variable for score count
 let score = document.querySelector(".matched");
+score.setAttribute("style", "display: none");
 
 //variable for cards
 let memoryCards = document.querySelectorAll("#game div");
@@ -199,7 +205,10 @@ restartButton.addEventListener("click", storeCards);
 
 //event listener to update score
 function updateScore() {
-  score.innerHTML = `Your Score: ${matched.length}/10`;
+  if (gameStatus != undefined) {
+    score.innerHTML = `Your Score: ${matched.length}/10`;
+    score.setAttribute("style", "display: block");
+  }
 }
 
 //save matches to local storage
@@ -254,6 +263,7 @@ function restartGame(e) {
     flipCount = 0;
     localStorage.clear();
     lastPick = undefined;
+    gameStatus = true;
     //shuffle the cards
     shuffledColors = shuffle(COLORS);
     //clear previously created divs
@@ -266,6 +276,7 @@ function restartGame(e) {
     gameDiv = document.querySelector("#game");
     //clearing of the matched array
     matched = [];
+    score.setAttribute("style", "display: none");
     //adding the unflipped status back to cards
     for (let item of memoryCards) {
       item.classList.add("unflipped");
@@ -274,15 +285,16 @@ function restartGame(e) {
 }
 
 function startGame(e) {
-  if (gameStatus != true) {
+  if (gameStatus == undefined) {
     flipCount = 0;
-    lastPick = undefined;
+    lastPick = undefined;  
+    gameStatus = true;
+    score.setAttribute("display", "none");
     for (let item of memoryCards) {
       item.classList.add("unflipped");
     }
   }
-  gameStatus = true;
-  score.removeAttribute("style", "display");
+
 }
 
 //function to store the div location upon reload
@@ -299,9 +311,11 @@ function storeCards() {
 function updateGameStatus() {
   if (matched == null) {
     gameStatus = undefined;
-    let status = JSON.stringify(gameStatus);
-    localStorage.setItem("GStatus", status);
+  } else if( matched.length == 10){
+    gameStatus = false;
   }
+  let status = JSON.stringify(gameStatus);
+  localStorage.setItem("GStatus", status);
 }
 
 window.addEventListener("load", restore);
